@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Technical Spec Companion</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --accent: #6366f1;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2.5rem 1.5rem;
+    }
+    .container { max-width: 950px; margin: 0 auto; }
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-draft {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .svg-flow { width: 100%; height: auto; max-height: 220px; margin: 1rem 0; }
+    .tabs-nav {
+      display: flex;
+      background: #0d131f;
+      border-radius: 10px 10px 0 0;
+      border: 1px solid var(--card-border);
+      border-bottom: none;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .tab-btn.active {
+      color: #fff;
+      background: var(--card-bg);
+      border-bottom: 2px solid var(--primary);
+    }
+    .tab-pane {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0 0 10px 10px;
+      padding: 1.75rem;
+      display: none;
+      margin-bottom: 2rem;
+    }
+    .tab-pane.active { display: block; }
+    .file-tree {
+      background: #0d131f;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      color: #93c5fd;
+      line-height: 1.5;
+    }
+    .review-box {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>⚖️ FairShare <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">Spec Status: Approved</span></h1>
+        <p class="subtitle">Technical Blueprint & Architecture Companion</p>
+      </div>
+    </header>
+
+    <!-- Architecture SVG Data Flow -->
+    <div class="card">
+      <h2>Architecture & Data Flow</h2>
+      <svg class="svg-flow" viewBox="0 0 920 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Input -->
+        <rect x="10" y="30" width="170" height="90" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+        <text x="95" y="65" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">Input Layer</text>
+        <text x="95" y="85" fill="#94a3b8" font-size="11" text-anchor="middle">PDF Drop / Text / Sample</text>
+        <text x="95" y="102" fill="#38bdf8" font-size="10" text-anchor="middle">pdfjs-dist (client-side)</text>
+
+        <!-- Arrow -->
+        <path d="M190 75 H225" stroke="#64748b" stroke-width="2"/>
+
+        <!-- Sentinel Engine -->
+        <rect x="235" y="30" width="220" height="90" rx="8" fill="#1e293b" stroke="#6366f1" stroke-width="2"/>
+        <text x="345" y="60" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">Contract Sentinel Engine</text>
+        <text x="345" y="80" fill="#94a3b8" font-size="11" text-anchor="middle">contractSentinel.js</text>
+        <text x="345" y="98" fill="#818cf8" font-size="10" text-anchor="middle">Heuristic Regex Rules Registry</text>
+
+        <!-- Arrow -->
+        <path d="M465 75 H500" stroke="#64748b" stroke-width="2"/>
+
+        <!-- Reactive State -->
+        <rect x="510" y="30" width="180" height="90" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="600" y="65" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">React State</text>
+        <text x="600" y="85" fill="#94a3b8" font-size="11" text-anchor="middle">Score (0-100) + Offsets</text>
+        <text x="600" y="102" fill="#34d399" font-size="10" text-anchor="middle">Instant 0ms synchronous</text>
+
+        <!-- Arrow -->
+        <path d="M700 75 H735" stroke="#64748b" stroke-width="2"/>
+
+        <!-- Split Workspace UI -->
+        <rect x="745" y="30" width="165" height="90" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+        <text x="827" y="60" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">Split Workspace UI</text>
+        <text x="827" y="80" fill="#94a3b8" font-size="11" text-anchor="middle">DocViewer | RiskCards</text>
+        <text x="827" y="98" fill="#fbbf24" font-size="10" text-anchor="middle">1-Click Pushback Copy</text>
+      </svg>
+    </div>
+
+    <!-- Tabbed Blueprint Sections -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="showTab(event, 'tab-stack')">📦 Stack & Deps</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-rules')">🧠 Rules Registry</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-files')">📁 File Tree</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-exec')">🚀 How to Run</button>
+    </div>
+
+    <!-- Tab 1: Stack -->
+    <div id="tab-stack" class="tab-pane active">
+      <h3 style="margin-bottom: 0.75rem;">Technology Stack</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        Calibrated for zero-latency in-browser execution, total data privacy, and zero server complexity:
+      </p>
+      <ul style="list-style: none; line-height: 1.8;">
+        <li>⚡ <strong>Vite 6 + React 19:</strong> Fast local development server, instant hot reload.</li>
+        <li>🎨 <strong>Tailwind CSS v3:</strong> Executive dark SaaS aesthetic with custom risk palettes.</li>
+        <li>📄 <strong>pdfjs-dist (v4):</strong> 100% in-browser PDF text extraction engine.</li>
+        <li>🛡️ <strong>Lucide React:</strong> Crisp modern icons for badges, cards, and copy triggers.</li>
+      </ul>
+    </div>
+
+    <!-- Tab 2: Rules -->
+    <div id="tab-rules" class="tab-pane">
+      <h3 style="margin-bottom: 0.75rem;">Modular Rules Registry (Teaching New Legalese)</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        Solves the user's question regarding modern legal workarounds by decoupling rule definitions from UI code:
+      </p>
+      <div style="background: #0d131f; padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #a5b4fc;">
+        // src/services/rulesRegistry.js<br>
+        export const RULES = [<br>
+        &nbsp;&nbsp;{<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;id: 'unpaid-maintenance',<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;category: 'Scope & Revisions',<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;severity: 'critical', // -25 pts<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;patterns: [ /(?:rectify|remedy|correct).*(?:perpetual|indefinite|free)/i ],<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;explanation: 'Exposes you to unlimited uncompensated work post-launch.',<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;counterProposal: 'Hi [Client], standard practice is a 30-day warranty...'<br>
+        &nbsp;&nbsp;}<br>
+        ];
+      </div>
+    </div>
+
+    <!-- Tab 3: Files -->
+    <div id="tab-files" class="tab-pane">
+      <h3 style="margin-bottom: 0.75rem;">Annotated Project Structure</h3>
+      <pre class="file-tree">
+fairshare/
+├── index.html
+├── package.json
+├── vite.config.js
+├── tailwind.config.js
+├── src/
+│   ├── main.jsx                 # Entry mount point
+│   ├── App.jsx                  # Main view coordinator & state
+│   ├── index.css                # Global styles & Tailwind
+│   ├── components/
+│   │   ├── Navbar.jsx           # Executive header & reset action
+│   │   ├── HowItWorks.jsx       # 3-step onboarding guide
+│   │   ├── ContractInput.jsx    # PDF dropzone & text input
+│   │   ├── WorkspaceView.jsx    # Split-screen workspace container
+│   │   ├── DocumentViewer.jsx   # Text viewer with reactive highlights
+│   │   ├── HealthScoreGauge.jsx # Animated 0-100 SVG score meter
+│   │   └── RiskCard.jsx         # Warning card with pushback generator
+│   ├── services/
+│   │   ├── pdfParser.js         # Browser PDF text extraction
+│   │   ├── contractSentinel.js  # Heuristic scoring engine
+│   │   └── rulesRegistry.js     # Extensible clause definitions
+│   └── data/
+│       ├── samplePredatoryContract.js
+│       └── sampleFairContract.js
+└── devpost/
+    ├── learner-profile.md
+    ├── scope.md
+    ├── prd.md
+    └── spec.md
+      </pre>
+    </div>
+
+    <!-- Tab 4: Execution -->
+    <div id="tab-exec" class="tab-pane">
+      <h3 style="margin-bottom: 0.75rem;">How Someone Tries It</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        Single command locally in the repository:
+      </p>
+      <div style="background: #0d131f; padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem; color: #38bdf8;">
+        npm install<br>
+        npm run dev
+      </div>
+      <p style="color: var(--text-muted); margin-top: 1rem;">
+        Open <code>http://localhost:5173</code> in your browser. Click <strong>"⚡ Load Sample Predatory Contract"</strong> to see the full audit in 1 second.
+      </p>
+    </div>
+
+    <div class="review-box">
+      <h3 style="margin-bottom: 0.5rem;">Review & Sign-Off</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Canonical specification stored in <code>devpost/spec.md</code>. If this captures what you want to build, tell your agent <em>"looks good"</em> to approve and proceed to <strong>5-build</strong>!
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function showTab(evt, tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>

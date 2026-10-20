@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — Scope Plan Companion</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --accent: #6366f1;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2.5rem 1.5rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-draft {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .diagram-container {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .diagram-container h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .svg-flow {
+      width: 100%;
+      height: auto;
+      max-height: 240px;
+    }
+    .tabs-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+    .tab-nav {
+      display: flex;
+      background: #0d131f;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .tab-btn.active {
+      color: #fff;
+      background: var(--card-bg);
+      border-bottom: 2px solid var(--primary);
+    }
+    .tab-pane {
+      padding: 1.75rem;
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    .boundary-tag {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+    .tag-now { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag-later { background: rgba(59, 130, 246, 0.15); color: var(--primary); border: 1px solid rgba(59, 130, 246, 0.3); }
+    .tag-cut { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+    .list-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .list-item:last-child {
+      border-bottom: none;
+    }
+    .review-action {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>⚖️ FairShare <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">Status: Approved</span></h1>
+        <p class="subtitle">Freelance Contract & Scope-Creep Sentinel — Proof of Concept Scope</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h2>💡 The Unique Kernel</h2>
+        <p><strong>Awareness + Diplomatic Action.</strong> Beyond flagging risky legal clauses, FairShare arms the freelancer with polite, professional, ready-to-copy counter-clauses and email templates so they can push back safely without damaging client goodwill.</p>
+      </div>
+      <div class="card">
+        <h2>👤 Target User</h2>
+        <p><strong>Independent & early-career freelancers</strong> (devs, designers, creators) reviewing contracts without a lawyer, vulnerable to predatory terms like unpaid bug fixes, Net-90 delays, and IP traps.</p>
+      </div>
+      <div class="card">
+        <h2>🎯 Visual Identity</h2>
+        <p><strong>Clean, executive SaaS craftsmanship</strong> (Linear / Stripe style). Professional dark theme, crisp typography, and clear risk badges (Green / Amber / Crimson) with zero toy or cartoonish elements.</p>
+      </div>
+    </div>
+
+    <!-- Core Loop Flowchart SVG -->
+    <div class="diagram-container">
+      <h2>Project Flow & Core Loop</h2>
+      <svg class="svg-flow" viewBox="0 0 850 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Step 1: User Upload -->
+        <rect x="20" y="35" width="160" height="90" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+        <text x="100" y="70" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">1. Freelancer Input</text>
+        <text x="100" y="95" fill="#94a3b8" font-size="11" text-anchor="middle">Drop PDF / Sample</text>
+
+        <!-- Arrow 1 -->
+        <path d="M190 80 H230" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+        <!-- Step 2: Analysis Engine -->
+        <rect x="240" y="35" width="170" height="90" rx="10" fill="#1e293b" stroke="#6366f1" stroke-width="2"/>
+        <text x="325" y="70" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">2. Sentinel Analysis</text>
+        <text x="325" y="95" fill="#94a3b8" font-size="11" text-anchor="middle">Score (0-100) & Trap Match</text>
+
+        <!-- Arrow 2 -->
+        <path d="M420 80 H460" stroke="#64748b" stroke-width="2"/>
+
+        <!-- Step 3: Risk Breakdown -->
+        <rect x="470" y="35" width="170" height="90" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="2"/>
+        <text x="555" y="70" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">3. Plain-English Risks</text>
+        <text x="555" y="95" fill="#94a3b8" font-size="11" text-anchor="middle">Highlight Dangerous Text</text>
+
+        <!-- Arrow 3 -->
+        <path d="M650 80 H690" stroke="#64748b" stroke-width="2"/>
+
+        <!-- Step 4: Diplomatic Counter -->
+        <rect x="700" y="35" width="140" height="90" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="770" y="70" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">4. Pushback</text>
+        <text x="770" y="95" fill="#94a3b8" font-size="11" text-anchor="middle">1-Click Copy Email</text>
+      </svg>
+    </div>
+
+    <!-- POC Boundaries Tabs -->
+    <div class="tabs-section">
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab(event, 'tab-now')">⚡ Now (PoC Scope)</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-later')">⏳ Later (Post-Hackathon)</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab-cut')">🚫 Explicitly Cut</button>
+      </div>
+
+      <div id="tab-now" class="tab-pane active">
+        <div class="list-item">
+          <span class="boundary-tag tag-now">IN SCOPE</span>
+          <strong>Client-Side PDF & Text Parser:</strong> Fast file drop or 1-click sample contract loading for instant judge testing.
+        </div>
+        <div class="list-item">
+          <span class="boundary-tag tag-now">IN SCOPE</span>
+          <strong>Fairness Score Engine:</strong> Immediate 0–100 rating with clear risk thresholds (Healthy, Caution, Critical).
+        </div>
+        <div class="list-item">
+          <span class="boundary-tag tag-now">IN SCOPE</span>
+          <strong>Key Trap Detection:</strong> Flags unpaid post-delivery fixes, Net-90 delays, sneaky IP grabs, and broad non-competes.
+        </div>
+        <div class="list-item">
+          <span class="boundary-tag tag-now">IN SCOPE</span>
+          <strong>Diplomatic Counter-Clauses:</strong> Pre-crafted, polite pushback templates ready to copy into an email with 1 click.
+        </div>
+      </div>
+
+      <div id="tab-later" class="tab-pane">
+        <div class="list-item">
+          <span class="boundary-tag tag-later">LATER</span>
+          <strong>User Accounts & Cloud History:</strong> Save and compare past scanned contracts across client projects.
+        </div>
+        <div class="list-item">
+          <span class="boundary-tag tag-later">LATER</span>
+          <strong>Version Comparison / Diff Viewer:</strong> Side-by-side comparison of original contract vs. client revisions.
+        </div>
+        <div class="list-item">
+          <span class="boundary-tag tag-later">LATER</span>
+          <strong>Tone Adjustment Sliders:</strong> Dynamically modulate pushback tone from "Collaborative" to "Strict Formal Legal".
+        </div>
+      </div>
+
+      <div id="tab-cut" class="tab-pane">
+        <div class="list-item">
+          <span class="boundary-tag tag-cut">CUT</span>
+          <strong>Full Legal E-Signing:</strong> Digital signature workflows require complex third-party certificate infrastructure not needed to prove the sentinel concept.
+        </div>
+        <div class="list-item">
+          <span class="boundary-tag tag-cut">CUT</span>
+          <strong>Paid Lawyer Marketplace:</strong> Connecting users to live legal attorneys distracts from the autonomous developer tool focus.
+        </div>
+      </div>
+    </div>
+
+    <div class="review-action">
+      <h3 style="margin-bottom: 0.5rem;">Review & Sign-Off</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Canonical specification stored in <code>devpost/scope.md</code>. Review the plan above. If this captures what you want to build, tell your agent <em>"looks good"</em> to approve and proceed to <strong>3-prd</strong>.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(evt, tabId) {
+      const tabPanes = document.querySelectorAll('.tab-pane');
+      tabPanes.forEach(pane => pane.classList.remove('active'));
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>

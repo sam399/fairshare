@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FairShare — PRD Companion</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --accent: #6366f1;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2.5rem 1.5rem;
+    }
+    .container { max-width: 950px; margin: 0 auto; }
+    header {
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-draft {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .svg-flow { width: 100%; height: auto; max-height: 200px; margin: 1rem 0; }
+    .tabs-nav {
+      display: flex;
+      background: #0d131f;
+      border-radius: 10px 10px 0 0;
+      border: 1px solid var(--card-border);
+      border-bottom: none;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .tab-btn.active {
+      color: #fff;
+      background: var(--card-bg);
+      border-bottom: 2px solid var(--primary);
+    }
+    .tab-pane {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 0 0 10px 10px;
+      padding: 1.75rem;
+      display: none;
+      margin-bottom: 2rem;
+    }
+    .tab-pane.active { display: block; }
+    .criterion {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .criterion:last-child { border-bottom: none; }
+    .check-icon { color: var(--success); font-weight: bold; }
+    .mock-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      background: #0d131f;
+      padding: 1.25rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+    }
+    .mock-pane {
+      background: #1e293b;
+      padding: 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+    }
+    .highlight-red { background: rgba(239, 68, 68, 0.25); border-left: 3px solid var(--danger); padding: 0.25rem 0.5rem; border-radius: 3px; }
+    .highlight-amber { background: rgba(245, 158, 11, 0.25); border-left: 3px solid var(--warning); padding: 0.25rem 0.5rem; border-radius: 3px; }
+    .highlight-green { background: rgba(16, 185, 129, 0.25); border-left: 3px solid var(--success); padding: 0.25rem 0.5rem; border-radius: 3px; }
+    .review-box {
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>⚖️ FairShare <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">PRD Status: Approved</span></h1>
+        <p class="subtitle">Product Requirements Document Companion</p>
+      </div>
+    </header>
+
+    <!-- User Journey SVG Flow -->
+    <div class="card">
+      <h2>Interactive User Journey</h2>
+      <svg class="svg-flow" viewBox="0 0 900 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Step 1 -->
+        <rect x="15" y="25" width="180" height="80" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+        <text x="105" y="55" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">1. Arrival & Input</text>
+        <text x="105" y="78" fill="#94a3b8" font-size="11" text-anchor="middle">How it works / Drop PDF / Sample</text>
+
+        <!-- Arrow -->
+        <path d="M205 65 H245" stroke="#64748b" stroke-width="2"/>
+
+        <!-- Step 2 -->
+        <rect x="255" y="25" width="180" height="80" rx="8" fill="#1e293b" stroke="#6366f1" stroke-width="2"/>
+        <text x="345" y="55" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">2. Split Analysis</text>
+        <text x="345" y="78" fill="#94a3b8" font-size="11" text-anchor="middle">Doc Viewer | Health Score</text>
+
+        <!-- Arrow -->
+        <path d="M445 65 H485" stroke="#64748b" stroke-width="2"/>
+
+        <!-- Step 3 -->
+        <rect x="495" y="25" width="180" height="80" rx="8" fill="#1e293b" stroke="#ef4444" stroke-width="2"/>
+        <text x="585" y="55" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">3. Danger Unpack</text>
+        <text x="585" y="78" fill="#94a3b8" font-size="11" text-anchor="middle">Plain English risk breakdown</text>
+
+        <!-- Arrow -->
+        <path d="M685 65 H725" stroke="#64748b" stroke-width="2"/>
+
+        <!-- Step 4 -->
+        <rect x="735" y="25" width="150" height="80" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="810" y="55" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">4. Pushback</text>
+        <text x="810" y="78" fill="#94a3b8" font-size="11" text-anchor="middle">1-Click Email Copy</text>
+      </svg>
+    </div>
+
+    <!-- Tabbed Specifications -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="showTab(event, 'tab-ui')">🖥️ Split-Screen UI</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-scoring')">📊 Health Scoring</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-counter')">✉️ Pushback Generator</button>
+      <button class="tab-btn" onclick="showTab(event, 'tab-edge')">🛡️ Edge Cases</button>
+    </div>
+
+    <!-- Tab 1: Split-Screen UI -->
+    <div id="tab-ui" class="tab-pane active">
+      <h3 style="margin-bottom: 0.75rem;">Side-by-Side Executive Experience</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        The contract text is shown on the left with interactive color highlights. Clicking any highlight focuses the corresponding card on the right, and vice versa.
+      </p>
+      
+      <div class="mock-split">
+        <div class="mock-pane">
+          <strong style="color: #60a5fa;">📄 Document Viewer (Left)</strong>
+          <p style="margin-top: 0.5rem; line-height: 1.5; color: #cbd5e1;">
+            Section 4. Payment shall be released within <span class="highlight-amber">90 business days</span> following invoice approval.<br><br>
+            Section 7. Contractor agrees to provide <span class="highlight-red">unlimited free defect corrections indefinitely</span> after final handover.<br><br>
+            Section 11. <span class="highlight-green">Standard mutual confidentiality applies for 2 years.</span>
+          </p>
+        </div>
+        <div class="mock-pane">
+          <strong style="color: #60a5fa;">🛡️ Sentinel Panel (Right)</strong>
+          <div style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 0.5rem; margin-top: 0.5rem;">
+            <div style="font-weight: bold; color: #f87171;">⚠️ Scope Creep / Unpaid Fixes</div>
+            <div style="color: #cbd5e1; font-size: 0.8rem; margin: 0.25rem 0;">Exposes you to unlimited free work if the client introduces errors post-delivery.</div>
+            <button style="background: #3b82f6; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Copy Pushback</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Scoring -->
+    <div id="tab-scoring" class="tab-pane">
+      <h3 style="margin-bottom: 0.75rem;">Contract Health Scoring Engine</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        Calculated dynamically across four critical freelancer risk pillars:
+      </p>
+      <div class="criterion"><span class="check-icon">✓</span> <strong>Payment Terms:</strong> Penalizes Net-60/90, pay-if-paid, or ambiguous milestone signoffs.</div>
+      <div class="criterion"><span class="check-icon">✓</span> <strong>Scope & Revisions:</strong> Penalizes unlimited revisions or lifetime uncompensated defect fixing.</div>
+      <div class="criterion"><span class="check-icon">✓</span> <strong>Intellectual Property:</strong> Penalizes clauses seizing pre-existing developer tooling or personal portfolios.</div>
+      <div class="criterion"><span class="check-icon">✓</span> <strong>Restrictive Covenants:</strong> Penalizes overbroad non-competes barring the freelancer from working in their industry.</div>
+    </div>
+
+    <!-- Tab 3: Pushback -->
+    <div id="tab-counter" class="tab-pane">
+      <h3 style="margin-bottom: 0.75rem;">Diplomatic Action: The Negotiation Engine</h3>
+      <p style="color: var(--text-muted); margin-bottom: 1rem;">
+        Provides tailored, polite counter-clauses and email copy so freelancers push back with zero awkwardness:
+      </p>
+      <div style="background: #0d131f; border-left: 4px solid var(--success); padding: 1rem; border-radius: 4px; font-style: italic; color: #cbd5e1;">
+        "Hi [Client], I reviewed the draft agreement and am excited to collaborate. Regarding Section 7, standard industry practice provides a 30-day post-launch warranty period for deliverables, after which ongoing support is billed at our standard hourly rate. Would this revised wording work for you?"
+      </div>
+    </div>
+
+    <!-- Tab 4: Edge Cases -->
+    <div id="tab-edge" class="tab-pane">
+      <h3 style="margin-bottom: 0.75rem;">States & Boundaries</h3>
+      <div class="criterion"><span class="check-icon">✓</span> <strong>Clean / Fair Contract:</strong> Displays a 90–95/100 score with celebratory "Safe to Sign — No Predatory Traps Found" green card.</div>
+      <div class="criterion"><span class="check-icon">✓</span> <strong>Corrupted / Empty PDF:</strong> Displays a friendly alert banner advising the user to check their file or paste text directly.</div>
+      <div class="criterion"><span class="check-icon">✓</span> <strong>Session Reset:</strong> "Clear & Test Another Contract" resets the dashboard instantly without a page refresh.</div>
+    </div>
+
+    <div class="review-box">
+      <h3 style="margin-bottom: 0.5rem;">Review & Sign-Off</h3>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Canonical specification stored in <code>devpost/prd.md</code>. If this captures what you want to build, tell your agent <em>"looks good"</em> to approve and proceed to <strong>4-spec</strong>.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function showTab(evt, tabId) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>
