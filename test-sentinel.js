@@ -1,8 +1,9 @@
 import { analyzeContract } from './src/services/contractSentinel.js';
+import { RULES } from './src/services/rulesRegistry.js';
 import { SAMPLE_PREDATORY_CONTRACT } from './src/data/samplePredatoryContract.js';
 import { SAMPLE_FAIR_CONTRACT } from './src/data/sampleFairContract.js';
 
-console.log('--- TESTING CONTRACT SENTINEL ENGINE ---');
+console.log('--- RUNNING CONTRACT SENTINEL & PUSHBACK VERIFICATION ---');
 
 // Test 1: Predatory Contract
 const predResult = analyzeContract(SAMPLE_PREDATORY_CONTRACT);
@@ -30,4 +31,18 @@ if (fairResult.healthScore >= 90 && fairResult.riskLevel === 'healthy' && fairRe
   process.exit(1);
 }
 
-console.log('\nALL MECHANICAL TESTS PASSED SUCCESSFULLY! 🚀');
+// Test 3: Diplomatic Pushback & Rule Integrity
+console.log('\nChecking Diplomatic Pushback Templates...');
+RULES.forEach(rule => {
+  if (!rule.counterProposal || rule.counterProposal.length < 20) {
+    console.error(`❌ TEST 3 FAILED: Rule ${rule.id} lacks a valid counterProposal!`);
+    process.exit(1);
+  }
+  if (!rule.explanation || !rule.fairStandard) {
+    console.error(`❌ TEST 3 FAILED: Rule ${rule.id} lacks explanation or fairStandard!`);
+    process.exit(1);
+  }
+});
+console.log(`✅ TEST 3 PASSED: All ${RULES.length} legal rules contain verified diplomatic pushback templates.`);
+
+console.log('\nALL MECHANICAL TESTS PASSED! 🚀');

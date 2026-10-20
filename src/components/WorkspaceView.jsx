@@ -2,14 +2,21 @@ import React, { useState } from 'react';
 import { HealthScoreGauge } from './HealthScoreGauge';
 import { DocumentViewer } from './DocumentViewer';
 import { RiskCard } from './RiskCard';
-import { ShieldCheck, Copy, Check, FileCheck } from 'lucide-react';
+import { NegotiationModal } from './NegotiationModal';
+import { ShieldCheck, Copy, Check, FileCheck, Mail, Sparkles } from 'lucide-react';
 
 export function WorkspaceView({ analysisResult }) {
   const [selectedClauseId, setSelectedClauseId] = useState(
     analysisResult.flaggedClauses[0]?.id || null
   );
   const [copiedAll, setCopiedAll] = useState(false);
-  const cardsContainerRef = React.useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   const handleSelectClause = (id) => {
     setSelectedClauseId(id);
@@ -35,13 +42,14 @@ export function WorkspaceView({ analysisResult }) {
 
     navigator.clipboard.writeText(emailHeader);
     setCopiedAll(true);
+    showToast('Full negotiation brief copied to clipboard!');
     setTimeout(() => setCopiedAll(false), 2500);
   };
 
   const isClean = analysisResult.flaggedClauses.length === 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       {/* Top Health Score Gauge */}
       <HealthScoreGauge
         score={analysisResult.healthScore}
@@ -64,7 +72,7 @@ export function WorkspaceView({ analysisResult }) {
 
         {/* Right: Sentinel Audit & Diplomatic Counter Actions (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-gray-800">
+          <div className="flex items-center justify-between pb-2 border-b border-gray-800 flex-wrap gap-2">
             <div>
               <h2 className="text-sm font-bold text-white uppercase tracking-wider">
                 {isClean ? 'Contract Health Verdict' : 'Flagged Traps & Diplomatic Solutions'}
@@ -77,28 +85,38 @@ export function WorkspaceView({ analysisResult }) {
             </div>
 
             {!isClean && (
-              <button
-                onClick={handleCopyAllNegotiation}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition shadow-md shadow-blue-500/20"
-              >
-                {copiedAll ? (
-                  <>
-                    <Check className="w-3.5 h-3.5 text-white" />
-                    <span>Copied Full Brief!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy Full Negotiation Email</span>
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 font-bold text-xs transition border border-gray-700"
+                >
+                  <Mail className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Preview Full Email</span>
+                </button>
+
+                <button
+                  onClick={handleCopyAllNegotiation}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition shadow-md shadow-blue-500/20"
+                >
+                  {copiedAll ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-white" />
+                      <span>Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Quick Copy</span>
+                    </>
+                  )}
+                </button>
+              </div>
             )}
           </div>
 
           {/* Clean Contract State (Edge Case) */}
           {isClean ? (
-            <div className="bg-[#111827] border border-emerald-900/40 rounded-2xl p-8 text-center space-y-4">
+            <div className="bg-[#111827] border border-emerald-900/40 rounded-2xl p-8 text-center space-y-4 shadow-xl">
               <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto text-emerald-400">
                 <ShieldCheck className="w-8 h-8" />
               </div>
@@ -130,13 +148,30 @@ export function WorkspaceView({ analysisResult }) {
                   key={clause.id}
                   clause={clause}
                   isActive={selectedClauseId === clause.id}
-                  onSelect={() => setSelectedClauseId(clause.id)}
+                  onSelect={() => handleSelectClause(clause.id)}
+                  onToast={showToast}
                 />
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {/* Negotiation Email Modal */}
+      <NegotiationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        flaggedClauses={analysisResult.flaggedClauses}
+        onToast={showToast}
+      />
+
+      {/* Floating Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-gray-900 text-white border border-blue-500/40 px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs font-semibold animate-bounce">
+          <Sparkles className="w-4 h-4 text-emerald-400" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 }

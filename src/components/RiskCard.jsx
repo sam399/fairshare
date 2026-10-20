@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AlertCircle, ChevronDown, ChevronUp, Copy, Check, Sparkles, Scale } from 'lucide-react';
 
-export function RiskCard({ clause, isActive, onSelect }) {
+export function RiskCard({ clause, isActive, onSelect, onToast }) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
@@ -27,6 +27,9 @@ export function RiskCard({ clause, isActive, onSelect }) {
     e.stopPropagation();
     navigator.clipboard.writeText(clause.counterProposal);
     setCopied(true);
+    if (onToast) {
+      onToast(`Copied counter-proposal for "${clause.title}"!`);
+    }
     setTimeout(() => setCopied(false), 2500);
   };
 
