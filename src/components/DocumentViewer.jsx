@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FileText } from 'lucide-react';
 
 export function DocumentViewer({ rawText, flaggedClauses, selectedClauseId, onSelectClause, fileName }) {
+  const containerRef = useRef(null);
+
+  // Auto-scroll to selected mark inside document viewer when selectedClauseId changes
+  useEffect(() => {
+    if (selectedClauseId && containerRef.current) {
+      const activeElement = containerRef.current.querySelector(`#mark-${selectedClauseId}`);
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, [selectedClauseId]);
+
   // Build highlighted spans by mapping clause positions
   // Sort clauses by startIndex to safely slice text
   const sortedClauses = [...flaggedClauses].sort((a, b) => a.startIndex - b.startIndex);
@@ -34,17 +46,18 @@ export function DocumentViewer({ rawText, flaggedClauses, selectedClauseId, onSe
       const isSelected = selectedClauseId === clause.id;
       const isCritical = clause.severity === 'critical';
       const highlightClasses = isSelected
-        ? 'bg-blue-500/40 border-b-2 border-blue-400 text-white font-semibold'
+        ? 'bg-blue-600/40 border-b-2 border-blue-400 text-white font-bold ring-2 ring-blue-500/50 shadow-md'
         : isCritical
-        ? 'bg-red-500/20 border-b-2 border-red-500/60 text-red-200 hover:bg-red-500/30'
-        : 'bg-amber-500/20 border-b-2 border-amber-500/60 text-amber-200 hover:bg-amber-500/30';
+        ? 'bg-red-500/20 border-b-2 border-red-500/60 text-red-200 hover:bg-red-500/35'
+        : 'bg-amber-500/20 border-b-2 border-amber-500/60 text-amber-200 hover:bg-amber-500/35';
 
       segments.push(
         <mark
+          id={`mark-${clause.id}`}
           key={clause.id}
           onClick={() => onSelectClause(clause.id)}
           title={`Click to inspect: ${clause.title}`}
-          className={`cursor-pointer rounded px-1 py-0.5 transition ${highlightClasses}`}
+          className={`cursor-pointer rounded px-1.5 py-0.5 transition-all duration-200 ${highlightClasses}`}
         >
           {clause.matchedText}
         </mark>
@@ -80,7 +93,7 @@ export function DocumentViewer({ rawText, flaggedClauses, selectedClauseId, onSe
       </div>
 
       {/* Contract Text Body */}
-      <div className="p-6 overflow-y-auto flex-1 bg-[#0d131f]/60">
+      <div ref={containerRef} className="p-6 overflow-y-auto flex-1 bg-[#0d131f]/60 scroll-smooth">
         {renderHighlightedContent()}
       </div>
     </div>

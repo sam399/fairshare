@@ -9,6 +9,19 @@ export function WorkspaceView({ analysisResult }) {
     analysisResult.flaggedClauses[0]?.id || null
   );
   const [copiedAll, setCopiedAll] = useState(false);
+  const cardsContainerRef = React.useRef(null);
+
+  const handleSelectClause = (id) => {
+    setSelectedClauseId(id);
+    if (id) {
+      setTimeout(() => {
+        const cardElement = document.getElementById(`card-${id}`);
+        if (cardElement) {
+          cardElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 50);
+    }
+  };
 
   const handleCopyAllNegotiation = () => {
     const fullBrief = analysisResult.flaggedClauses
@@ -44,7 +57,7 @@ export function WorkspaceView({ analysisResult }) {
             rawText={analysisResult.rawText}
             flaggedClauses={analysisResult.flaggedClauses}
             selectedClauseId={selectedClauseId}
-            onSelectClause={setSelectedClauseId}
+            onSelectClause={handleSelectClause}
             fileName={analysisResult.fileName}
           />
         </div>

@@ -5,13 +5,20 @@ export function RiskCard({ clause, isActive, onSelect }) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(true);
 
+  // If card becomes active from document click, keep it expanded
+  React.useEffect(() => {
+    if (isActive) {
+      setExpanded(true);
+    }
+  }, [isActive]);
+
   const isCritical = clause.severity === 'critical';
   const severityBadge = isCritical
     ? 'bg-red-500/15 text-red-400 border-red-500/30'
     : 'bg-amber-500/15 text-amber-400 border-amber-500/30';
 
   const cardBorder = isActive
-    ? 'border-blue-500 ring-2 ring-blue-500/20'
+    ? 'border-blue-500 ring-2 ring-blue-500/40 shadow-lg shadow-blue-500/10'
     : isCritical
     ? 'border-red-950 hover:border-red-800'
     : 'border-amber-950 hover:border-amber-800';
@@ -25,8 +32,9 @@ export function RiskCard({ clause, isActive, onSelect }) {
 
   return (
     <div
+      id={`card-${clause.id}`}
       onClick={onSelect}
-      className={`bg-[#111827] border rounded-xl transition cursor-pointer overflow-hidden ${cardBorder}`}
+      className={`bg-[#111827] border rounded-xl transition-all duration-200 cursor-pointer overflow-hidden ${cardBorder}`}
     >
       {/* Card Header */}
       <div className="p-4 flex items-start justify-between gap-3">
