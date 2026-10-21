@@ -1,13 +1,13 @@
 /**
  * Client-Side PDF Text Extractor using pdfjs-dist
- * Runs 100% in-browser with zero external server dependencies.
+ * Runs 100% in-browser with local Vite worker (0 CDN dependency, 100% offline).
  */
 
 import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-// Set worker source for browser environment
 if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 }
 
 export async function extractTextFromPdf(file) {
@@ -29,7 +29,7 @@ export async function extractTextFromPdf(file) {
     }
 
     if (!fullText.trim()) {
-      throw new Error('No selectable text found. The document may be a scanned image or empty.');
+      throw new Error('No selectable text found in this PDF. It may be a scanned image or empty. Try pasting the text directly into the "Paste Contract Text" tab.');
     }
 
     return fullText.trim();

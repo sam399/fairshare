@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UploadCloud, FileText, Zap, Sparkles, AlertCircle } from 'lucide-react';
+import { UploadCloud, FileText, Zap, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import { SAMPLE_PREDATORY_CONTRACT } from '../data/samplePredatoryContract';
 import { SAMPLE_FAIR_CONTRACT } from '../data/sampleFairContract';
 
@@ -112,10 +112,14 @@ export function ContractInput({ onAnalyzeText, onAnalyzePdf, isAnalyzing, error 
             disabled={isAnalyzing}
           />
           <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mb-4 text-blue-400">
-            <UploadCloud className="w-8 h-8" />
+            {isAnalyzing ? (
+              <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+            ) : (
+              <UploadCloud className="w-8 h-8" />
+            )}
           </div>
           <h3 className="text-base font-bold text-white mb-1">
-            {isAnalyzing ? 'Extracting and analyzing contract...' : 'Drop your contract PDF here'}
+            {isAnalyzing ? 'Extracting and evaluating contract...' : 'Drop your contract PDF here'}
           </h3>
           <p className="text-xs text-gray-400 max-w-sm">
             Or click to browse from your device. Extracted 100% locally in-memory — your agreement never leaves your browser.

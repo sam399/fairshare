@@ -3,7 +3,7 @@ import { RULES } from './src/services/rulesRegistry.js';
 import { SAMPLE_PREDATORY_CONTRACT } from './src/data/samplePredatoryContract.js';
 import { SAMPLE_FAIR_CONTRACT } from './src/data/sampleFairContract.js';
 
-console.log('--- RUNNING CONTRACT SENTINEL & PUSHBACK VERIFICATION ---');
+console.log('--- COMPREHENSIVE SENTINEL & EDGE CASE VERIFICATION ---');
 
 // Test 1: Predatory Contract
 const predResult = analyzeContract(SAMPLE_PREDATORY_CONTRACT);
@@ -18,7 +18,7 @@ if (predResult.healthScore < 50 && predResult.riskLevel === 'critical' && predRe
   process.exit(1);
 }
 
-// Test 2: Fair Contract
+// Test 2: Fair Contract State
 const fairResult = analyzeContract(SAMPLE_FAIR_CONTRACT);
 console.log('\nFair Contract Score:', fairResult.healthScore);
 console.log('Risk Level:', fairResult.riskLevel);
@@ -45,4 +45,14 @@ RULES.forEach(rule => {
 });
 console.log(`✅ TEST 3 PASSED: All ${RULES.length} legal rules contain verified diplomatic pushback templates.`);
 
-console.log('\nALL MECHANICAL TESTS PASSED! 🚀');
+// Test 4: Edge Case - Empty or whitespace document
+console.log('\nChecking Empty & Corrupted Document Handling...');
+const emptyResult = analyzeContract('   ');
+if (emptyResult.error && typeof emptyResult.error === 'string') {
+  console.log('✅ TEST 4 PASSED: Empty input correctly caught and handled with user-friendly error.');
+} else {
+  console.error('❌ TEST 4 FAILED');
+  process.exit(1);
+}
+
+console.log('\nALL MECHANICAL TESTS PASSED SUCCESSFULLY! 🚀');
